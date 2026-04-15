@@ -11,14 +11,12 @@
             "id": "12615bf4079f4b3b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "json",
               "state": {
-                "file": "60XT Plan.md",
-                "mode": "source",
-                "source": false
+                "file": "site/data/config.json"
               },
               "icon": "lucide-file",
-              "title": "60XT Plan"
+              "title": "config"
             }
           }
         ]
@@ -94,7 +92,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "60XT Plan.md",
+                "file": "site/data/config.json",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +102,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 60XT Plan"
+              "title": "Backlinks for config"
             }
           },
           {
@@ -113,12 +111,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "60XT Plan.md",
+                "file": "site/data/config.json",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 60XT Plan"
+              "title": "Outgoing links from config"
             }
           },
           {
@@ -156,13 +154,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "60XT Plan.md",
+                "file": "site/data/config.json",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 60XT Plan"
+              "title": "Outline of config"
             }
           },
           {
@@ -197,8 +195,9 @@
   },
   "active": "12615bf4079f4b3b",
   "lastOpenFiles": [
-    "2026-04-15.md",
+    "HealthAutoExport-2026-03-22-2026-04-15.json",
     "60XT Plan.md",
+    "2026-04-15.md",
     "journal/2026.04.14.md",
     "HealthAutoExport-2026-03-30-2026-04-15.json",
     "journal",
