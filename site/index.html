@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>60XT — Triston's Transformation</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #e8ff47;
+    --accent-dim: rgba(232,255,71,0.12);
+    --accent-mid: rgba(232,255,71,0.4);
+    --text: #f0f0f0;
+    --text-muted: #666;
+    --text-dim: #999;
+    --red: #ff4757;
+    --red-dim: rgba(255,71,87,0.15);
+    --orange: #ffa502;
+    --orange-dim: rgba(255,165,2,0.15);
+    --green: #2ed573;
+    --green-dim: rgba(46,213,115,0.12);
+    --blue: #5e9cf5;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+  .header-center { display: flex; justify-content: center; }
+  .header-meta { justify-self: end; }
+
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--accent); }
+  .logo span { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; }
+  .header-meta { display: flex; gap: 24px; align-items: center; }
+  .progress-shell { margin-top: 16px; width: calc(100% - 28px); }
+  .progress-track {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    overflow: visible;
+  }
+  .progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(232,255,71,0.25) 0%, rgba(232,255,71,0.75) 100%);
+  }
+  .day-badge {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    background: var(--accent);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #0a0a0a;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 0 0 4px rgba(232,255,71,0.12);
+    white-space: nowrap;
+  }
+  .last-updated { font-size: 12px; color: var(--text-muted); }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
+
+  .hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); opacity: 0; transition: opacity 0.2s; }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .stat-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; color: var(--text); line-height: 1; margin-bottom: 6px; }
+  .stat-value .unit { font-size: 16px; font-weight: 500; color: var(--text-dim); letter-spacing: 0; }
+  .stat-delta { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .delta-positive { color: var(--green); }
+  .delta-negative { color: var(--red); }
+  .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; margin-top: 36px; }
+  .section-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .charts-grid.three { grid-template-columns: 2fr 1fr; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px 16px; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .chart-title .chart-legend { display: flex; gap: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chart-wrap { position: relative; height: 180px; }
+  .chart-wrap.tall { height: 220px; }
+
+  .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .macro-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 18px; }
+  .macro-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 6px; }
+  .macro-current { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; margin-bottom: 10px; }
+  .macro-bar-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+  .macro-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .macro-target { font-size: 11px; color: var(--text-muted); }
+
+  .hrv-status { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .hrv-good { background: var(--green-dim); color: var(--green); }
+  .hrv-moderate { background: var(--accent-dim); color: var(--accent); }
+  .hrv-elevated { background: var(--orange-dim); color: var(--orange); }
+  .hrv-overreach { background: var(--red-dim); color: var(--red); }
+
+  .flags-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
+  .flag-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .flag-item:last-child { border-bottom: none; }
+  .flag-date { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-top: 1px; min-width: 70px; }
+  .no-flags { color: var(--green); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+
+  .journal-feed { display: flex; flex-direction: column; gap: 16px; }
+  .journal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; }
+  .journal-card-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .journal-header-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .journal-date { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .journal-day { font-size: 18px; font-weight: 700; color: var(--text); }
+  .journal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .journal-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(94,156,245,0.35);
+    background: rgba(94,156,245,0.14);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .journal-summary {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr;
+    grid-template-areas:
+      "weight nutrition burn recovery"
+      "lean nutrition burn recovery";
+    gap: 10px;
+    margin-bottom: 18px;
+    align-items: stretch;
+    grid-auto-rows: minmax(120px, auto);
+  }
+  .journal-metric { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; height: 100%; display: flex; flex-direction: column; }
+  .journal-metric-weight { grid-area: weight; }
+  .journal-metric-lean { grid-area: lean; }
+  .journal-metric-nutrition { grid-area: nutrition; }
+  .journal-metric-burn { grid-area: burn; }
+  .journal-metric-recovery { grid-area: recovery; }
+  .journal-metric-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .journal-metric-value { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1; }
+  .journal-metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+  .journal-metric .journal-tags { margin-top: auto; padding-top: 10px; }
+  .journal-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .journal-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .day-type-training { background: rgba(94,156,245,0.15); color: var(--blue); }
+  .day-type-rest { background: rgba(255,255,255,0.08); color: var(--text-dim); }
+  .journal-metric-gauge { display: flex; align-items: center; gap: 12px; }
+  .journal-metric-gauges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .journal-gauge {
+    --gauge-color: var(--accent);
+    --gauge-pct: 0deg;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: conic-gradient(var(--gauge-color) 0deg, var(--gauge-color) var(--gauge-pct), var(--border) var(--gauge-pct), var(--border) 360deg);
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+  }
+  .journal-gauge::after {
+    content: '';
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    grid-area: 1 / 1;
+  }
+  .journal-gauge-text {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .journal-gauge-card { display: flex; align-items: center; gap: 10px; }
+  .journal-gauge-copy { min-width: 0; }
+  .journal-gauge-copy .journal-metric-value { font-size: 16px; }
+  .journal-gauge-copy .journal-metric-sub { margin-top: 4px; }
+  .journal-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+  .journal-body { font-size: 14px; color: var(--text-dim); line-height: 1.75; white-space: pre-wrap; }
+  .journal-subcard { margin-top: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 18px; }
+
+  .tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: var(--radius-sm); padding: 3px; width: fit-content; }
+  .tab { padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-muted); border: none; background: transparent; transition: all 0.15s; }
+  .tab.active { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
+  .plan-card h3 { font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+  .plan-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .plan-row:last-child { border-bottom: none; }
+  .plan-row-label { color: var(--text-dim); }
+  .plan-row-value { font-weight: 600; color: var(--text); }
+
+  @media (max-width: 900px) {
+    main { padding: 20px 16px 60px; }
+    .hero-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    .charts-grid.three { grid-template-columns: 1fr; }
+    .macro-grid { grid-template-columns: repeat(2, 1fr); }
+    .journal-summary { grid-template-columns: 1fr; grid-template-areas: none; }
+    .journal-metric-weight,
+    .journal-metric-lean,
+    .journal-metric-nutrition,
+    .journal-metric-burn,
+    .journal-metric-recovery { grid-area: auto; }
+    .plan-grid { grid-template-columns: 1fr; }
+    header { padding: 16px; }
+    .header-meta { gap: 12px; justify-self: auto; }
+    .header-row { display: flex; align-items: flex-start; flex-direction: column; }
+    .header-center { width: 100%; justify-content: flex-start; }
+    .progress-shell { width: calc(100% - 18px); }
+  }
+
+  .loading { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--text-muted); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div><span class="logo">60XT <span>Triston's Transformation</span></span></div>
+    <div class="header-center">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('dashboard')">Dashboard</button>
+        <button class="tab" onclick="switchTab('journal')">Journal</button>
+        <button class="tab" onclick="switchTab('plan')">Plan</button>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="last-updated" id="last-updated">Loading...</span>
+    </div>
+  </div>
+  <div class="progress-shell">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+      <span class="day-badge" id="day-badge">Day —</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="hero-grid" id="hero-stats"><div class="loading">Loading biometrics...</div></div>
+
+    <div class="section-header"><span class="section-title">Body Composition</span><div class="section-rule"></div></div>
+    <div class="charts-grid three">
+      <div class="chart-card">
+        <div class="chart-title">Weight & Fat Mass
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e8ff47"></div>Weight</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ff4757"></div>Fat Mass</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#5e9cf5"></div>Lean Mass</div>
+          </div>
+        </div>
+        <div class="chart-wrap tall"><canvas id="chart-composition"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Body Fat %</div>
+        <div class="chart-wrap tall"><canvas id="chart-bf"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-title">Recovery</span><div class="section-rule"></div></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">HRV (SDNN)<div id="hrv-status-badge"></div></div>
+        <div class="chart-wrap"><canvas id="chart-hrv"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Resting Heart Rate
+          <div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#ff4757"></div>RHR</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-rhr"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-title">Nutrition — Last 7 Days</span><div class="section-rule"></div></div>
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-title">Daily Calories vs TDEE</div>
+      <div class="chart-wrap"><canvas id="chart-calories"></canvas></div>
+    </div>
+    <div class="macro-grid" id="macro-grid"></div>
+
+    <div class="section-header"><span class="section-title">Recent Flags</span><div class="section-rule"></div></div>
+    <div class="flags-section" id="flags-section"><div class="loading">Loading...</div></div>
+  </div>
+
+  <div class="tab-content" id="tab-journal">
+    <div class="journal-feed" id="journal-feed"><div class="loading">Loading journal...</div></div>
+  </div>
+
+  <div class="tab-content" id="tab-plan">
+    <div class="plan-grid">
+      <div class="plan-card" id="plan-macros">
+        <h3>Macro Targets</h3>
+        <div class="plan-row"><span class="plan-row-label">Calories (training)</span><span class="plan-row-value">1,800 kcal</span></div>
+        <div class="plan-row"><span class="plan-row-label">Calories (rest)</span><span class="plan-row-value">1,600 kcal</span></div>
+        <div class="plan-row"><span class="plan-row-label">Protein</span><span class="plan-row-value">200g</span></div>
+        <div class="plan-row"><span class="plan-row-label">Fat (training)</span><span class="plan-row-value">55g</span></div>
+        <div class="plan-row"><span class="plan-row-label">Fat (rest)</span><span class="plan-row-value">65g</span></div>
+        <div class="plan-row"><span class="plan-row-label">Carbs Mon–Thu</span><span class="plan-row-value">75g</span></div>
+        <div class="plan-row"><span class="plan-row-label">Carbs Fri–Sat</span><span class="plan-row-value">100g</span></div>
+        <div class="plan-row"><span class="plan-row-label">Carbs Sunday</span><span class="plan-row-value">35g</span></div>
+      </div>
+      <div class="plan-card" id="plan-training">
+        <h3>Training Schedule</h3>
+      </div>
+      <div class="plan-card">
+        <h3>HRV Thresholds</h3>
+        <div class="plan-row"><span class="plan-row-label">55+ ms</span><span class="plan-row-value" style="color:var(--green)">Well Recovered</span></div>
+        <div class="plan-row"><span class="plan-row-label">45–54 ms</span><span class="plan-row-value" style="color:var(--accent)">Moderate</span></div>
+        <div class="plan-row"><span class="plan-row-label">38–44 ms</span><span class="plan-row-value" style="color:var(--orange)">Elevated Stress</span></div>
+        <div class="plan-row"><span class="plan-row-label">&lt;38 ms × 2 days</span><span class="plan-row-value" style="color:var(--red)">Rest Day Required</span></div>
+      </div>
+      <div class="plan-card">
+        <h3>Athlete Baseline</h3>
+        <div class="plan-row" id="plan-weight"><span class="plan-row-label">Start Weight</span><span class="plan-row-value">—</span></div>
+        <div class="plan-row" id="plan-bf"><span class="plan-row-label">Start Body Fat</span><span class="plan-row-value">—</span></div>
+        <div class="plan-row" id="plan-lean"><span class="plan-row-label">Lean Body Mass</span><span class="plan-row-value">—</span></div>
+        <div class="plan-row"><span class="plan-row-label">BMR</span><span class="plan-row-value">~1,993 kcal</span></div>
+        <div class="plan-row"><span class="plan-row-label">Est. TDEE</span><span class="plan-row-value">~3,100 kcal</span></div>
+        <div class="plan-row" id="plan-start"><span class="plan-row-label">Challenge Start</span><span class="plan-row-value">—</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+async function loadJSONL(path) {
+  const res = await fetch(path, { cache: 'no-store' });
+  const text = await res.text();
+  return text.trim().split('\n').filter(Boolean).map(l => JSON.parse(l));
+}
+
+async function loadConfig() {
+  const res = await fetch('./data/config.json', { cache: 'no-store' });
+  return res.json();
+}
+
+Chart.defaults.color = '#666';
+Chart.defaults.borderColor = '#222';
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif";
+
+const tooltipDefaults = {
+  backgroundColor: '#1a1a1a', borderColor: '#333', borderWidth: 1,
+  padding: 10, titleColor: '#f0f0f0', bodyColor: '#999', cornerRadius: 8,
+};
+
+function lineDefaults(color, n) {
+  const r = n > 30 ? 2 : 3;
+  return { borderColor: color, backgroundColor: 'transparent', borderWidth: 2, pointRadius: r, pointHoverRadius: 5, pointBackgroundColor: color, tension: 0.3 };
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function formatLongDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+function daysSince(dateStr) {
+  const start = new Date(dateStr + 'T12:00:00');
+  const now = new Date();
+  return Math.floor((now - start) / 86400000) + 1;
+}
+
+function dayNumber(startDate, dateStr) {
+  const start = new Date(startDate + 'T12:00:00');
+  const current = new Date(dateStr + 'T12:00:00');
+  return Math.floor((current - start) / 86400000) + 1;
+}
+
+function delta(current, start, higherIsBetter = false) {
+  if (current == null || start == null) return null;
+  const diff = current - start;
+  const isPositive = higherIsBetter ? diff > 0 : diff < 0;
+  const sign = diff > 0 ? '+' : '';
+  return { text: `${sign}${diff.toFixed(1)}`, positive: isPositive };
+}
+
+function macroColor(pct) {
+  if (pct < 0.7) return '#5e9cf5';
+  if (pct <= 1.1) return '#2ed573';
+  if (pct <= 1.3) return '#ffa502';
+  return '#ff4757';
+}
+
+function hrvStatus(ms) {
+  if (ms >= 55) return { label: 'Well Recovered', cls: 'hrv-good' };
+  if (ms >= 45) return { label: 'Moderate', cls: 'hrv-moderate' };
+  if (ms >= 38) return { label: 'Elevated Stress', cls: 'hrv-elevated' };
+  return { label: 'Overreach', cls: 'hrv-overreach' };
+}
+
+function dayTypeForDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.getDay() === 0 ? 'rest' : 'training';
+}
+
+function dayTypeMeta(dateStr) {
+  const type = dayTypeForDate(dateStr);
+  return type === 'rest'
+    ? { label: 'Rest Day', cls: 'day-type-rest' }
+    : { label: 'Training Day', cls: 'day-type-training' };
+}
+
+function scheduleForDate(dateStr) {
+  const cfg = window.CFG || {};
+  const schedule = cfg.training_schedule || [];
+  const weekday = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+  return schedule.find(item => item.day === weekday) || null;
+}
+
+function calorieTargetForDate(dateStr) {
+  const cfg = window.CFG || {};
+  const targets = cfg.targets || {};
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = d.getDay();
+  if (day === 0) return targets.rest_day?.calories_kcal ?? null;
+  if (day === 5 || day === 6) return targets.fri_sat?.calories_kcal ?? targets.training_days?.calories_kcal ?? null;
+  return targets.training_days?.calories_kcal ?? null;
+}
+
+function macroTargetsForDate(dateStr) {
+  const cfg = window.CFG || {};
+  const targets = cfg.targets || {};
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = d.getDay();
+  if (day === 0) return targets.rest_day || {};
+  if (day === 5 || day === 6) return targets.fri_sat || targets.training_days || {};
+  return targets.training_days || {};
+}
+
+function renderHero(data) {
+  const latest = data[data.length - 1];
+  const cfgB = window.CFG && window.CFG.baseline;
+  const start = cfgB
+    ? { body: { weight_lbs: cfgB.weight_lbs, body_fat_pct: cfgB.body_fat_pct, fat_mass_lbs: cfgB.fat_mass_lbs, lean_mass_lbs: cfgB.lean_mass_lbs } }
+    : data[0];
+  const container = document.getElementById('hero-stats');
+
+  const weightDelta = delta(latest.body.weight_lbs, start.body.weight_lbs, false);
+  const bfDelta = delta(latest.body.body_fat_pct, start.body.body_fat_pct, false);
+  const fatMassDelta = delta(latest.body.fat_mass_lbs, start.body.fat_mass_lbs, false);
+  const leanDelta = delta(latest.body.lean_mass_lbs, start.body.lean_mass_lbs, true);
+  const hrv = latest.recovery.hrv_sdnn_ms;
+
+  const cards = [
+    { label: 'Body Weight', value: latest.body.weight_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: weightDelta, sub: `Start: ${start.body.weight_lbs} lbs` },
+    { label: 'Body Fat', value: latest.body.body_fat_pct?.toFixed(1) ?? '—', unit: '%', delta: bfDelta, sub: `Fat mass: ${latest.body.fat_mass_lbs?.toFixed(1)} lbs` },
+    { label: 'Fat Mass', value: latest.body.fat_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: fatMassDelta, sub: `Start: ${start.body.fat_mass_lbs} lbs` },
+    { label: 'Lean Mass', value: latest.body.lean_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: leanDelta, sub: `Start: ${start.body.lean_mass_lbs} lbs` },
+  ];
+
+  container.innerHTML = cards.map(c => `
+    <div class="stat-card">
+      <div class="stat-label">${c.label}</div>
+      <div class="stat-value">${c.value}<span class="unit"> ${c.unit}</span></div>
+      ${c.delta ? `<div class="stat-delta ${c.delta.positive ? 'delta-positive' : 'delta-negative'}">${c.delta.text} ${c.unit} since start</div>` : ''}
+      <div class="stat-sub">${c.sub}</div>
+    </div>
+  `).join('');
+}
+
+function renderMacros(data) {
+  const completeDays = data.slice(0, -1).filter(d =>
+    d.nutrition &&
+    [d.nutrition.calories_kcal, d.nutrition.protein_g, d.nutrition.fat_g, d.nutrition.carbs_g].some(v => v != null)
+  );
+  const windowDays = completeDays.slice(-7);
+  if (!windowDays.length) return;
+
+  const t = (window.CFG && window.CFG.targets && window.CFG.targets.training_days) || { calories_kcal: 1800, protein_g: 200, fat_g: 55, carbs_g: 75 };
+  const targets = { calories_kcal: t.calories_kcal, protein_g: t.protein_g, fat_g: t.fat_g, carbs_g: t.carbs_g };
+  const labels = { calories_kcal: 'Calories', protein_g: 'Protein', fat_g: 'Fat', carbs_g: 'Carbs' };
+  const units = { calories_kcal: 'kcal', protein_g: 'g', fat_g: 'g', carbs_g: 'g' };
+  document.getElementById('macro-grid').innerHTML = Object.keys(targets).map(key => {
+    const values = windowDays.map(d => d.nutrition[key]).filter(v => v != null);
+    if (!values.length) return '';
+    const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
+    const pct = Math.min(avg / targets[key], 1.5);
+    const color = macroColor(avg / targets[key]);
+    return `<div class="macro-card">
+      <div class="macro-label">${labels[key]}<span style="color:var(--text-muted)"> · 7d avg</span></div>
+      <div class="macro-current" style="color:${color}">${Math.round(avg)}<span style="font-size:14px;font-weight:500;color:var(--text-muted)"> ${units[key]}</span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:${(pct/1.5*100).toFixed(1)}%;background:${color}"></div></div>
+      <div class="macro-target">Target: ${targets[key]} ${units[key]}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderFlags(data) {
+  const container = document.getElementById('flags-section');
+  const flagged = data.filter(d => d.flags && d.flags.length > 0).slice(-7).reverse();
+  if (!flagged.length) { container.innerHTML = '<div class="no-flags">✓ No flags in the last 7 days</div>'; return; }
+  container.innerHTML = flagged.map(d => d.flags.map(f => `
+    <div class="flag-item"><span class="flag-date">${formatDate(d.date)}</span><span>${f}</span></div>
+  `).join('')).join('');
+}
+
+function renderCharts(data) {
+  const labels = data.map(d => formatDate(d.date));
+  const n = data.length;
+
+  new Chart(document.getElementById('chart-composition'), {
+    type: 'line',
+    data: { labels, datasets: [
+      { label: 'Weight', data: data.map(d => d.body.weight_lbs), ...lineDefaults('#e8ff47', n) },
+      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), ...lineDefaults('#5e9cf5', n) },
+      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n) },
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' } } } }
+  });
+
+  new Chart(document.getElementById('chart-bf'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Body Fat %', data: data.map(d => d.body.body_fat_pct), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 8 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + '%' } } } }
+  });
+
+  const latest = data[data.length - 1];
+  const st = hrvStatus(latest.recovery.hrv_sdnn_ms);
+  document.getElementById('hrv-status-badge').innerHTML = `<span class="hrv-status ${st.cls}">● ${st.label}</span>`;
+
+  new Chart(document.getElementById('chart-hrv'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'HRV', data: data.map(d => d.recovery.hrv_sdnn_ms), ...lineDefaults('#2ed573', n), backgroundColor: 'rgba(46,213,115,0.08)', fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults },
+      annotation: { annotations: {
+        floor: { type: 'line', yMin: 38, yMax: 38, borderColor: 'rgba(255,71,87,0.4)', borderWidth: 1, borderDash: [4,4], label: { content: 'Floor (38ms)', display: true, position: 'end', color: '#ff4757', font: { size: 10 }, backgroundColor: 'transparent' } },
+        moderate: { type: 'line', yMin: 45, yMax: 45, borderColor: 'rgba(255,165,2,0.3)', borderWidth: 1, borderDash: [4,4] },
+        good: { type: 'line', yMin: 55, yMax: 55, borderColor: 'rgba(46,213,115,0.3)', borderWidth: 1, borderDash: [4,4] },
+      }}},
+      scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, min: 30, ticks: { callback: v => v + 'ms' } } }
+    }
+  });
+
+  new Chart(document.getElementById('chart-rhr'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'RHR', data: data.map(d => d.recovery.resting_hr_bpm), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' bpm' } } } }
+  });
+
+  const last7 = data.slice(-7);
+  const labels7 = last7.map(d => formatDate(d.date));
+  new Chart(document.getElementById('chart-calories'), {
+    type: 'bar',
+    data: { labels: labels7, datasets: [
+      { label: 'Calories In', data: last7.map(d => d.nutrition.calories_kcal), backgroundColor: 'rgba(232,255,71,0.75)', borderRadius: 4, stack: 'intake' },
+      { label: 'Basal Calories', data: last7.map(d => d.activity.basal_burn_kcal), backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 4, stack: 'burn' },
+      { label: 'Active Calories', data: last7.map(d => d.activity.active_burn_kcal), backgroundColor: 'rgba(94,156,245,0.6)', borderRadius: 4, stack: 'burn' },
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#666', boxWidth: 10, boxHeight: 10, padding: 12 } }, tooltip: { ...tooltipDefaults } }, scales: { x: { stacked: true, grid: { color: '#1a1a1a' } }, y: { stacked: true, grid: { color: '#1a1a1a' }, ticks: { callback: v => v.toLocaleString() + ' kcal' } } } }
+  });
+}
+
+function metricCard(label, value, sub = '', extraClass = '') {
+  return `<div class="journal-metric ${extraClass}">
+    <div class="journal-metric-label">${label}</div>
+    <div class="journal-metric-value">${value}</div>
+    <div class="journal-metric-sub">${sub}</div>
+  </div>`;
+}
+
+function recoveryMetricCard(recovery, recoveryTag) {
+  const hrv = recovery?.hrv_sdnn_ms;
+  const rhr = recovery?.resting_hr_bpm;
+  const tagHtml = recoveryTag ? `<div class="journal-tags"><span class="journal-tag">${recoveryTag}</span></div>` : '';
+  if (hrv == null) return `<div class="journal-metric journal-metric-recovery">
+    <div class="journal-metric-label">Recovery</div>
+    <div class="journal-metric-value">—</div>
+    <div class="journal-metric-sub">No recovery</div>
+    ${tagHtml}
+  </div>`;
+  const status = hrvStatus(hrv);
+  return `<div class="journal-metric journal-metric-recovery">
+    <div class="journal-metric-label">Recovery</div>
+    <div class="journal-metric-value">${Math.round(hrv)} <span style="font-size:12px;color:var(--text-muted)">ms</span></div>
+    <div class="journal-metric-sub">${rhr != null ? `${Math.round(rhr)} bpm RHR` : 'No RHR'}</div>
+    <div class="journal-metric-sub"><span class="hrv-status ${status.cls}">${status.label}</span></div>
+    ${tagHtml}
+  </div>`;
+}
+
+function nutritionMetricCard(dateStr, nutrition) {
+  const calories = nutrition?.calories_kcal;
+  const target = calorieTargetForDate(dateStr);
+  const macroTargets = macroTargetsForDate(dateStr);
+
+  function gauge(label, value, unit, goal) {
+    if (value == null || goal == null) {
+      return `<div class="journal-gauge-card">
+        <div class="journal-gauge" style="--gauge-color:var(--border);--gauge-pct:0deg">
+          <div class="journal-gauge-text">—</div>
+        </div>
+        <div class="journal-gauge-copy">
+          <div class="journal-metric-label">${label}</div>
+          <div class="journal-metric-value">—</div>
+          <div class="journal-metric-sub">No budget</div>
+        </div>
+      </div>`;
+    }
+    const ratio = value / goal;
+    const pct = Math.min(ratio, 1.5);
+    const pctWhole = Math.round(ratio * 100);
+    const color = macroColor(ratio);
+    const gaugeDeg = `${Math.min(pct, 1) * 360}deg`;
+    return `<div class="journal-gauge-card">
+      <div class="journal-gauge" style="--gauge-color:${color};--gauge-pct:${gaugeDeg}">
+        <div class="journal-gauge-text">${pctWhole}%</div>
+      </div>
+      <div class="journal-gauge-copy">
+        <div class="journal-metric-label">${label}</div>
+        <div class="journal-metric-value">${Math.round(value)} <span style="font-size:12px;color:var(--text-muted)">${unit}</span></div>
+        <div class="journal-metric-sub">Budget ${Math.round(goal)} ${unit}</div>
+      </div>
+    </div>`;
+  }
+
+  if (calories == null || target == null) return metricCard('Nutrition', '—', 'No intake', 'journal-metric-nutrition');
+  return `<div class="journal-metric journal-metric-nutrition">
+    <div class="journal-metric-label">Nutrition</div>
+    <div class="journal-metric-gauges">
+      ${gauge('Calories', calories, 'kcal', target)}
+      ${gauge('Protein', nutrition?.protein_g, 'g', macroTargets.protein_g)}
+      ${gauge('Carbs', nutrition?.carbs_g, 'g', macroTargets.carbs_g)}
+      ${gauge('Fat', nutrition?.fat_g, 'g', macroTargets.fat_g)}
+    </div>
+  </div>`;
+}
+
+function renderJournal(data, entries) {
+  const container = document.getElementById('journal-feed');
+  if (!data.length) { container.innerHTML = '<div class="loading">No journal entries yet.</div>'; return; }
+
+  const entryByDate = new Map(entries.map(e => [e.date, e]));
+  const startDate = (window.CFG && window.CFG.challenge && window.CFG.challenge.start_date) || data[0].date;
+  container.innerHTML = [...data].reverse().map(d => {
+    const entry = entryByDate.get(d.date);
+    const dayType = dayTypeMeta(d.date);
+    const schedule = scheduleForDate(d.date);
+    const tdee = (d.activity?.basal_burn_kcal ?? 0) + (d.activity?.active_burn_kcal ?? 0);
+    const summary = [
+      metricCard('Weight', d.body?.weight_lbs != null ? `${d.body.weight_lbs.toFixed(1)} lbs` : '—', d.body?.body_fat_pct != null ? `${d.body.body_fat_pct.toFixed(1)}% body fat` : 'No composition', 'journal-metric-weight'),
+      metricCard('Lean Mass', d.body?.lean_mass_lbs != null ? `${d.body.lean_mass_lbs.toFixed(1)} lbs` : '—', d.body?.fat_mass_lbs != null ? `${d.body.fat_mass_lbs.toFixed(1)} lbs fat mass` : 'No composition', 'journal-metric-lean'),
+      recoveryMetricCard(d.recovery, schedule?.recovery),
+      nutritionMetricCard(d.date, d.nutrition),
+      `<div class="journal-metric journal-metric-burn">
+        <div class="journal-metric-label">Burn</div>
+        <div class="journal-metric-value">${tdee ? `${Math.round(tdee).toLocaleString()} kcal` : '—'}</div>
+        <div class="journal-metric-sub">${d.activity?.active_burn_kcal != null ? `${Math.round(d.activity.active_burn_kcal).toLocaleString()} active` : 'No activity'}</div>
+        ${schedule?.training ? `<div class="journal-tags"><span class="journal-tag">${schedule.training}</span></div>` : ''}
+      </div>`,
+    ].join('');
+
+    return `
+    <div class="journal-card">
+      <div class="journal-card-header">
+        <div>
+          <div class="journal-date">${formatDate(d.date)}</div>
+          <div class="journal-day">${formatLongDate(d.date)}</div>
+        </div>
+        <div class="journal-header-meta">
+          <div class="journal-status ${dayType.cls}">${dayType.label}</div>
+          <div class="journal-date">Day ${dayNumber(startDate, d.date)}</div>
+        </div>
+      </div>
+      <div class="journal-summary">${summary}</div>
+      ${entry ? `<div class="journal-subcard"><div class="journal-title">${entry.title || 'Journal Entry'}</div><div class="journal-body">${entry.body || ''}</div></div>` : ''}
+    </div>
+  `;}).join('');
+}
+
+function renderHeader(data) {
+  const latest = data[data.length - 1];
+  const cfg = window.CFG || {};
+  const startDate = (cfg.challenge && cfg.challenge.start_date) || '2026-03-31';
+  const durationDays = (cfg.challenge && cfg.challenge.duration_days) || 60;
+  const title = (cfg.challenge && cfg.challenge.site_title) || document.title;
+  const name = (cfg.challenge && cfg.challenge.name) || '60XT';
+  const athlete = (cfg.challenge && cfg.challenge.athlete) || 'Triston';
+  const headerTitle = (cfg.challenge && cfg.challenge.header_title) || name;
+  const headerSubtitle = (cfg.challenge && cfg.challenge.header_subtitle) || `${athlete}'s Transformation`;
+  const currentDay = Math.max(1, Math.min(daysSince(startDate), durationDays));
+  const pct = durationDays > 1 ? ((currentDay - 1) / (durationDays - 1)) * 100 : 100;
+  document.title = title;
+  const logoEl = document.querySelector('.logo');
+  if (logoEl) logoEl.innerHTML = headerTitle + ' <span>' + headerSubtitle + '</span>';
+  document.getElementById('day-badge').textContent = 'Day ' + currentDay;
+  document.getElementById('day-badge').style.left = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('last-updated').textContent = 'Updated ' + formatDate(latest.date);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function populatePlanFromConfig(cfg) {
+  const b = cfg.baseline || {};
+  const c = cfg.challenge || {};
+  const schedule = cfg.training_schedule || [];
+  const t = (cfg.targets && cfg.targets.training_days) || {};
+  const r = (cfg.targets && cfg.targets.rest_day) || {};
+  const fs = (cfg.targets && cfg.targets.fri_sat) || {};
+
+  function setRow(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.querySelector('.plan-row-value').textContent = val;
+  }
+  setRow('plan-weight', b.weight_lbs ? b.weight_lbs + ' lbs' : '—');
+  setRow('plan-bf', b.body_fat_pct ? b.body_fat_pct + '%' : '—');
+  setRow('plan-lean', b.lean_mass_lbs ? b.lean_mass_lbs + ' lbs' : '—');
+  if (c.start_date) {
+    const d = new Date(c.start_date + 'T12:00:00');
+    setRow('plan-start', d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+  }
+  const trainingCard = document.getElementById('plan-training');
+  if (trainingCard && schedule.length) {
+    trainingCard.innerHTML = '<h3>Training Schedule</h3>'
+      + schedule.map(item =>
+        '<div class="plan-row"><span class="plan-row-label">' + (item.day || item.label || '—') + '</span><span class="plan-row-value">' + [item.training, item.recovery].filter(Boolean).join(' · ') + '</span></div>'
+      ).join('');
+  }
+  const macroCard = document.getElementById('plan-macros');
+  if (macroCard && t.calories_kcal) {
+    macroCard.innerHTML = '<h3>Macro Targets</h3>'
+      + '<div class="plan-row"><span class="plan-row-label">Calories (training)</span><span class="plan-row-value">' + t.calories_kcal.toLocaleString() + ' kcal</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Calories (rest)</span><span class="plan-row-value">' + (r.calories_kcal || '—') + ' kcal</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Protein</span><span class="plan-row-value">' + (t.protein_g || '—') + 'g</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Fat (training)</span><span class="plan-row-value">' + (t.fat_g || '—') + 'g</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Fat (rest)</span><span class="plan-row-value">' + (r.fat_g || '—') + 'g</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Carbs Mon\u2013Thu</span><span class="plan-row-value">' + (t.carbs_g || '—') + 'g</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Carbs Fri\u2013Sat</span><span class="plan-row-value">' + (fs.carbs_g || '—') + 'g</span></div>'
+      + '<div class="plan-row"><span class="plan-row-label">Carbs Sunday</span><span class="plan-row-value">' + (r.carbs_g || '—') + 'g</span></div>';
+  }
+}
+
+async function init() {
+  try {
+    const [cfg, biometrics, journal] = await Promise.all([
+      loadConfig(),
+      loadJSONL('./data/biometrics.jsonl'),
+      loadJSONL('./data/journal.jsonl'),
+    ]);
+    window.CFG = cfg;
+    populatePlanFromConfig(cfg);
+    renderHeader(biometrics);
+    renderHero(biometrics);
+    renderMacros(biometrics);
+    renderFlags(biometrics);
+    renderCharts(biometrics);
+    renderJournal(biometrics, journal);
+  } catch (err) {
+    console.error('Failed to load data:', err);
+    document.getElementById('hero-stats').innerHTML = '<div class="loading">Error: ' + err.message + '</div>';
+  }
+}
+
+init();
+</script>
+</body>
+</html>

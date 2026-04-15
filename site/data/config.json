@@ -1,0 +1,89 @@
+{
+  "challenge": {
+    "name": "60XT",
+    "athlete": "Triston",
+    "header_title": "60XT",
+    "header_subtitle": "Triston's Challenge",
+    "start_date": "2026-03-30",
+    "duration_days": 60,
+    "site_title": "60XT — Triston's Challenge",
+    "domain": "60xt.tristonyoder.com"
+  },
+  "baseline": {
+    "weight_lbs": 205.6,
+    "body_fat_pct": 18.2,
+    "fat_mass_lbs": 37.42,
+    "lean_mass_lbs": 168.18
+  },
+  "training_schedule": [
+    {
+      "day": "Monday",
+      "training": "Alpha: Squat & Pull",
+      "recovery": "Sauna & Cold Plunge"
+    },
+    {
+      "day": "Tuesday",
+      "training": "Alpha: Hinge & Press"
+    },
+    {
+      "day": "Wednesday",
+      "training": "Alpha: Full Body"
+    },
+    {
+      "day": "Thursday",
+      "training": "Alpha: Squat & Pull",
+      "recovery": "Sauna & Cold Plunge"
+    },
+    {
+      "day": "Friday",
+      "training": "Alpha: Hinge & Press",
+      "recovery": "Sauna & Cold Plunge"
+    },
+    {
+      "day": "Saturday",
+      "training": "Alpha: Full Body",
+      "recovery": "Sauna & Cold Plunge"
+    },
+    {
+      "day": "Sunday",
+      "training": "Rest"
+    }
+  ],
+  "targets": {
+    "training_days": {
+      "calories_kcal": 1800,
+      "protein_g": 200,
+      "fat_g": 55,
+      "carbs_g": 75
+    },
+    "rest_day": {
+      "calories_kcal": 1600,
+      "protein_g": 200,
+      "fat_g": 65,
+      "carbs_g": 35
+    },
+    "fri_sat": {
+      "calories_kcal": 1800,
+      "protein_g": 200,
+      "fat_g": 55,
+      "carbs_g": 100
+    }
+  },
+  "hrv_thresholds": {
+    "well_recovered": 55,
+    "moderate": 45,
+    "elevated_stress": 38,
+    "floor_ms": 38
+  },
+  "flags": {
+    "protein_low_g": 185,
+    "fat_high_g": 80,
+    "calories_low_kcal": 1400,
+    "calories_high_kcal": 2000,
+    "carbs_low_training_g": 20
+  },
+  "privacy": {
+    "exclude_metrics": ["blood_pressure"],
+    "strip_source_field": true
+  }
+}
