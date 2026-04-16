@@ -289,11 +289,10 @@
     <div class="section-header"><span class="section-title">Body Composition</span><div class="section-rule"></div></div>
     <div class="charts-grid three">
       <div class="chart-card">
-        <div class="chart-title">Weight & Fat Mass
+        <div class="chart-title">Body Weight
           <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#e8ff47"></div>Weight</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#ff4757"></div>Fat Mass</div>
             <div class="legend-item"><div class="legend-dot" style="background:#5e9cf5"></div>Lean Mass</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ff4757"></div>Fat Mass</div>
           </div>
         </div>
         <div class="chart-wrap tall"><canvas id="chart-composition"></canvas></div>
@@ -301,6 +300,20 @@
       <div class="chart-card">
         <div class="chart-title">Body Fat %</div>
         <div class="chart-wrap tall"><canvas id="chart-bf"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-grid" style="margin-top:16px">
+      <div class="chart-card">
+        <div class="chart-title">Lean Mass
+          <div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#5e9cf5"></div>lbs</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-lean"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Fat Mass
+          <div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#ff4757"></div>lbs</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-fat"></canvas></div>
       </div>
     </div>
 
@@ -552,33 +565,29 @@ function renderCharts(data) {
   new Chart(document.getElementById('chart-composition'), {
     type: 'line',
     data: { labels, datasets: [
-      { label: 'Weight', data: data.map(d => d.body.weight_lbs), ...lineDefaults('#e8ff47', n), yAxisID: 'yMain' },
-      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), ...lineDefaults('#5e9cf5', n), yAxisID: 'yMain' },
-      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n), yAxisID: 'yFat' },
+      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: true },
+      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: true },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults, callbacks: {
-        label: ctx => {
-          const unit = ctx.dataset.yAxisID === 'yFat' ? ' lbs fat' : ' lbs';
-          return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y?.toFixed(1) + unit;
-        }
-      }}},
+      plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } },
       scales: {
         x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } },
-        yMain: {
-          type: 'linear', position: 'left',
-          grid: { color: '#1a1a1a' },
-          ticks: { callback: v => v + ' lbs', color: '#666' },
-        },
-        yFat: {
-          type: 'linear', position: 'right',
-          grid: { drawOnChartArea: false },
-          ticks: { callback: v => v + ' lbs', color: '#ff4757' },
-          title: { display: true, text: 'Fat Mass', color: 'rgba(255,71,87,0.5)', font: { size: 10 } },
-        }
+        y: { stacked: true, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } }
       }
     }
+  });
+
+  new Chart(document.getElementById('chart-lean'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), ...lineDefaults('#5e9cf5', n), backgroundColor: 'rgba(94,156,245,0.08)', fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
+  });
+
+  new Chart(document.getElementById('chart-fat'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
   new Chart(document.getElementById('chart-bf'), {
