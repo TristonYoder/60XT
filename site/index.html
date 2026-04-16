@@ -595,7 +595,7 @@ function renderGoal(data) {
 
   const container = document.getElementById('goal-stats');
   container.innerHTML = `
-    <div class="stat-card">
+    <div class="stat-card" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-mid)">
       <div class="stat-label">Goal Body Fat</div>
       <div class="stat-value">${goalBfPct}<span class="unit"> %</span></div>
       <div class="stat-delta ${currentBf <= goalBfPct ? 'delta-positive' : 'delta-negative'}">${bfDelta != null ? bfDelta + '% to go' : '—'}</div>
