@@ -507,7 +507,7 @@ function renderHero(data) {
 
   const cards = [
     { label: 'Body Weight', value: latest.body.weight_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: weightDelta, sub: `Start: ${start.body.weight_lbs} lbs` },
-    { label: 'Body Fat', value: latest.body.body_fat_pct?.toFixed(1) ?? '—', unit: '%', delta: bfDelta, sub: `Fat mass: ${latest.body.fat_mass_lbs?.toFixed(1)} lbs` },
+    { label: 'Body Fat', value: latest.body.body_fat_pct?.toFixed(1) ?? '—', unit: '%', delta: bfDelta, sub: `Start: ${start.body.body_fat_pct}%` },
     { label: 'Fat Mass', value: latest.body.fat_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: fatMassDelta, sub: `Start: ${start.body.fat_mass_lbs} lbs` },
     { label: 'Lean Mass', value: latest.body.lean_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: leanDelta, sub: `Start: ${start.body.lean_mass_lbs} lbs` },
   ];
