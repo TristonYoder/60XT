@@ -284,6 +284,10 @@
 
 <main>
   <div class="tab-content active" id="tab-dashboard">
+    <div class="section-header"><span class="section-title">Goal</span><div class="section-rule"></div></div>
+    <div class="hero-grid" id="goal-stats"></div>
+
+    <div class="section-header"><span class="section-title">Current</span><div class="section-rule"></div></div>
     <div class="hero-grid" id="hero-stats"><div class="loading">Loading biometrics...</div></div>
 
     <div class="section-header"><span class="section-title">Body Composition</span><div class="section-rule"></div></div>
@@ -320,9 +324,6 @@
         <div class="chart-wrap"><canvas id="chart-fat"></canvas></div>
       </div>
     </div>
-
-    <div class="section-header"><span class="section-title">Goal</span><div class="section-rule"></div></div>
-    <div class="hero-grid" id="goal-stats"></div>
 
     <div class="section-header"><span class="section-title">Recovery</span><div class="section-rule"></div></div>
     <div class="charts-grid">
@@ -519,8 +520,8 @@ function renderHero(data) {
   const hrv = latest.recovery.hrv_sdnn_ms;
 
   const cards = [
-    { label: 'Body Weight', value: latest.body.weight_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: weightDelta, sub: `Start: ${start.body.weight_lbs} lbs` },
     { label: 'Body Fat', value: latest.body.body_fat_pct?.toFixed(1) ?? '—', unit: '%', delta: bfDelta, sub: `Start: ${start.body.body_fat_pct}%` },
+    { label: 'Body Weight', value: latest.body.weight_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: weightDelta, sub: `Start: ${start.body.weight_lbs} lbs` },
     { label: 'Fat Mass', value: latest.body.fat_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: fatMassDelta, sub: `Start: ${start.body.fat_mass_lbs} lbs` },
     { label: 'Lean Mass', value: latest.body.lean_mass_lbs?.toFixed(1) ?? '—', unit: 'lbs', delta: leanDelta, sub: `Start: ${start.body.lean_mass_lbs} lbs` },
   ];
