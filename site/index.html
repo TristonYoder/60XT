@@ -673,7 +673,7 @@ function renderCharts(data) {
       label: ctx => ctx.dataset.label === 'Goal'
         ? ' Goal Fat: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
         : ' Fat Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
-    }}}, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { min: fatGoal ? Math.min(...fatGoal.data.filter(v => v != null)) - 3 : undefined, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
+    }}}, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { min: fatGoal ? Math.floor(Math.min(...fatGoal.data.filter(v => v != null)) / 5) * 5 : undefined, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
   const goalBfPct = (window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null;
