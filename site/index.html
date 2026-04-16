@@ -494,12 +494,18 @@ function macroTargetsForDate(dateStr) {
   return targets.training_days || {};
 }
 
+function getStartEntry(data) {
+  const startDate = window.CFG?.challenge?.start_date;
+  if (startDate) {
+    const match = data.find(d => d.date === startDate);
+    if (match) return match;
+  }
+  return data[0];
+}
+
 function renderHero(data) {
   const latest = data[data.length - 1];
-  const cfgB = window.CFG && window.CFG.baseline;
-  const start = cfgB
-    ? { body: { weight_lbs: cfgB.weight_lbs, body_fat_pct: cfgB.body_fat_pct, fat_mass_lbs: cfgB.fat_mass_lbs, lean_mass_lbs: cfgB.lean_mass_lbs } }
-    : data[0];
+  const start = getStartEntry(data);
   const container = document.getElementById('hero-stats');
 
   const weightDelta = delta(latest.body.weight_lbs, start.body.weight_lbs, false);
@@ -569,8 +575,7 @@ function renderGoal(data) {
   if (goalBfPct == null) return;
 
   const latest = data[data.length - 1];
-  const cfgB = cfg.baseline;
-  const startFat = cfgB ? cfgB.fat_mass_lbs : data[0].body.fat_mass_lbs;
+  const startFat = getStartEntry(data).body.fat_mass_lbs;
   const currentLean = latest.body.lean_mass_lbs;
   const currentFat = latest.body.fat_mass_lbs;
   const currentBf = latest.body.body_fat_pct;
@@ -848,8 +853,9 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-function populatePlanFromConfig(cfg) {
-  const b = cfg.baseline || {};
+function populatePlanFromConfig(cfg, data) {
+  const startEntry = data ? getStartEntry(data) : null;
+  const b = startEntry ? startEntry.body : {};
   const c = cfg.challenge || {};
   const schedule = cfg.training_schedule || [];
   const t = (cfg.targets && cfg.targets.training_days) || {};
@@ -896,7 +902,7 @@ async function init() {
       loadJSONL('./data/journal.jsonl'),
     ]);
     window.CFG = cfg;
-    populatePlanFromConfig(cfg);
+    populatePlanFromConfig(cfg, biometrics);
     renderHeader(biometrics);
     renderHero(biometrics);
     renderGoal(biometrics);
