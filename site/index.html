@@ -134,11 +134,6 @@
   .hrv-elevated { background: var(--orange-dim); color: var(--orange); }
   .hrv-overreach { background: var(--red-dim); color: var(--red); }
 
-  .flags-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
-  .flag-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .flag-item:last-child { border-bottom: none; }
-  .flag-date { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-top: 1px; min-width: 70px; }
-  .no-flags { color: var(--green); font-size: 13px; display: flex; align-items: center; gap: 8px; }
 
   .journal-feed { display: flex; flex-direction: column; gap: 16px; }
   .journal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; }
@@ -346,8 +341,6 @@
     </div>
     <div class="macro-grid" id="macro-grid"></div>
 
-    <div class="section-header"><span class="section-title">Recent Flags</span><div class="section-rule"></div></div>
-    <div class="flags-section" id="flags-section"><div class="loading">Loading...</div></div>
   </div>
 
   <div class="tab-content" id="tab-journal">
@@ -565,14 +558,6 @@ function renderMacros(data) {
   }).join('');
 }
 
-function renderFlags(data) {
-  const container = document.getElementById('flags-section');
-  const flagged = data.filter(d => d.flags && d.flags.length > 0).slice(-7).reverse();
-  if (!flagged.length) { container.innerHTML = '<div class="no-flags">✓ No flags in the last 7 days</div>'; return; }
-  container.innerHTML = flagged.map(d => d.flags.map(f => `
-    <div class="flag-item"><span class="flag-date">${formatDate(d.date)}</span><span>${f}</span></div>
-  `).join('')).join('');
-}
 
 function renderGoal(data) {
   const cfg = window.CFG || {};
@@ -928,7 +913,6 @@ async function init() {
     renderHero(biometrics);
     renderGoal(biometrics);
     renderMacros(biometrics);
-    renderFlags(biometrics);
     renderCharts(biometrics);
     renderJournal(biometrics, journal);
   } catch (err) {
