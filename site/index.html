@@ -695,7 +695,8 @@ function renderCharts(data) {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' bpm' } } } }
   });
 
-  const last7 = data.slice(-7);
+  const today = new Date().toISOString().slice(0, 10);
+  const last7 = data.filter(d => d.date < today).slice(-7);
   const labels7 = last7.map(d => formatDate(d.date));
   new Chart(document.getElementById('chart-calories'), {
     type: 'bar',
