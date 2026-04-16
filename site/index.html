@@ -639,7 +639,7 @@ function renderCharts(data) {
           if (ctx.datasetIndex === 0) return ' Lean Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs';
           const lean = ctx.chart.data.datasets[0].data[ctx.dataIndex] ?? 0;
           const fat = (ctx.parsed.y - lean).toFixed(1);
-          return [' Body Weight: ' + ctx.parsed.y?.toFixed(1) + ' lbs', ' Fat Mass: ' + fat + ' lbs'];
+          return [' Body Weight: ' + ctx.parsed.y?.toFixed(1) + ' lbs', ' Lean Mass: ' + lean?.toFixed(1) + ' lbs', ' Fat Mass: ' + fat + ' lbs'];
         }
       }}},
       scales: {
