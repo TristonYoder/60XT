@@ -625,17 +625,24 @@ function renderGoal(data) {
 function renderCharts(data) {
   const labels = data.map(d => formatDate(d.date));
   const n = data.length;
+  const goalFrac = ((window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null) / 100;
+  const goalLine = props => goalFrac != null
+    ? { label: 'Goal', data: data.map(d => d.body.lean_mass_lbs != null ? d.body.lean_mass_lbs / (1 - goalFrac) * (props.fatOnly ? goalFrac : 1) : null), borderColor: '#e8ff47', backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 4, pointBackgroundColor: '#e8ff47', tension: 0.3, fill: false }
+    : null;
 
+  const compGoal = goalLine({ fatOnly: false });
   new Chart(document.getElementById('chart-composition'), {
     type: 'line',
     data: { labels, datasets: [
       { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.3)', borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: 'origin' },
       { label: 'Body Weight', data: data.map(d => d.body.weight_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.3)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: '-1' },
+      ...(compGoal ? [compGoal] : []),
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults, callbacks: {
         label: ctx => {
+          if (ctx.dataset.label === 'Goal') return ' Goal Weight: ' + ctx.parsed.y?.toFixed(1) + ' lbs';
           if (ctx.datasetIndex === 0) return ' Lean Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs';
           const lean = ctx.chart.data.datasets[0].data[ctx.dataIndex] ?? 0;
           const fat = (ctx.parsed.y - lean).toFixed(1);
@@ -655,10 +662,18 @@ function renderCharts(data) {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
+  const fatGoal = goalLine({ fatOnly: true });
   new Chart(document.getElementById('chart-fat'), {
     type: 'line',
-    data: { labels, datasets: [{ label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
+    data: { labels, datasets: [
+      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true },
+      ...(fatGoal ? [fatGoal] : []),
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults, callbacks: {
+      label: ctx => ctx.dataset.label === 'Goal'
+        ? ' Goal Fat: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
+        : ' Fat Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
+    }}}, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
   const goalBfPct = (window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null;
