@@ -317,6 +317,9 @@
       </div>
     </div>
 
+    <div class="section-header"><span class="section-title">Goal</span><div class="section-rule"></div></div>
+    <div class="hero-grid" id="goal-stats"></div>
+
     <div class="section-header"><span class="section-title">Recovery</span><div class="section-rule"></div></div>
     <div class="charts-grid">
       <div class="chart-card">
@@ -523,7 +526,9 @@ function renderHero(data) {
 }
 
 function renderMacros(data) {
-  const completeDays = data.slice(0, -1).filter(d =>
+  const today = new Date().toISOString().slice(0, 10);
+  const completeDays = data.filter(d =>
+    d.date < today &&
     d.nutrition &&
     [d.nutrition.calories_kcal, d.nutrition.protein_g, d.nutrition.fat_g, d.nutrition.carbs_g].some(v => v != null)
   );
@@ -556,6 +561,60 @@ function renderFlags(data) {
   container.innerHTML = flagged.map(d => d.flags.map(f => `
     <div class="flag-item"><span class="flag-date">${formatDate(d.date)}</span><span>${f}</span></div>
   `).join('')).join('');
+}
+
+function renderGoal(data) {
+  const cfg = window.CFG || {};
+  const goalBfPct = cfg.goal?.body_fat_pct;
+  if (goalBfPct == null) return;
+
+  const latest = data[data.length - 1];
+  const cfgB = cfg.baseline;
+  const startFat = cfgB ? cfgB.fat_mass_lbs : data[0].body.fat_mass_lbs;
+  const currentLean = latest.body.lean_mass_lbs;
+  const currentFat = latest.body.fat_mass_lbs;
+  const currentBf = latest.body.body_fat_pct;
+
+  const goalFrac = goalBfPct / 100;
+  const targetWeight = currentLean / (1 - goalFrac);
+  const targetFat = targetWeight * goalFrac;
+  const fatToLose = currentFat - targetFat;
+  const totalFatToLose = startFat - targetFat;
+  const progressPct = totalFatToLose > 0 ? Math.min(((startFat - currentFat) / totalFatToLose) * 100, 100) : 100;
+
+  const bfDelta = currentBf != null ? (currentBf - goalBfPct).toFixed(1) : null;
+
+  const container = document.getElementById('goal-stats');
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Goal Body Fat</div>
+      <div class="stat-value">${goalBfPct}<span class="unit"> %</span></div>
+      <div class="stat-delta ${currentBf <= goalBfPct ? 'delta-positive' : 'delta-negative'}">${bfDelta != null ? (bfDelta > 0 ? '+' : '') + bfDelta + '% to go' : '—'}</div>
+      <div class="stat-sub">Based on current lean mass</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Target Weight</div>
+      <div class="stat-value">${targetWeight.toFixed(1)}<span class="unit"> lbs</span></div>
+      <div class="stat-delta ${latest.body.weight_lbs <= targetWeight ? 'delta-positive' : 'delta-negative'}">${(latest.body.weight_lbs - targetWeight).toFixed(1) > 0 ? '+' : ''}${(latest.body.weight_lbs - targetWeight).toFixed(1)} lbs to go</div>
+      <div class="stat-sub">At ${currentLean?.toFixed(1)} lbs lean mass</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Target Fat Mass</div>
+      <div class="stat-value">${targetFat.toFixed(1)}<span class="unit"> lbs</span></div>
+      <div class="stat-delta ${currentFat <= targetFat ? 'delta-positive' : 'delta-negative'}">${fatToLose.toFixed(1)} lbs to lose</div>
+      <div class="stat-sub">Current: ${currentFat?.toFixed(1)} lbs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Fat Loss Progress</div>
+      <div class="stat-value">${progressPct.toFixed(0)}<span class="unit"> %</span></div>
+      <div class="stat-sub" style="margin-top:10px">
+        <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${progressPct.toFixed(1)}%;background:var(--accent);border-radius:2px;transition:width 0.6s ease"></div>
+        </div>
+      </div>
+      <div class="stat-sub" style="margin-top:6px">${(startFat - currentFat).toFixed(1)} of ${totalFatToLose.toFixed(1)} lbs lost</div>
+    </div>
+  `;
 }
 
 function renderCharts(data) {
@@ -597,10 +656,15 @@ function renderCharts(data) {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
+  const goalBfPct = (window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null;
   new Chart(document.getElementById('chart-bf'), {
     type: 'line',
     data: { labels, datasets: [{ label: 'Body Fat %', data: data.map(d => d.body.body_fat_pct), ...lineDefaults('#ff4757', n), backgroundColor: 'rgba(255,71,87,0.08)', fill: true }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 8 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + '%' } } } }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults },
+      annotation: goalBfPct != null ? { annotations: {
+        goal: { type: 'line', yMin: goalBfPct, yMax: goalBfPct, borderColor: 'rgba(232,255,71,0.5)', borderWidth: 1, borderDash: [4, 4], label: { content: goalBfPct + '% goal', display: true, position: 'end', color: '#e8ff47', font: { size: 10 }, backgroundColor: 'transparent' } }
+      }} : {}
+    }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 8 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + '%' } } } }
   });
 
   const latest = data[data.length - 1];
@@ -835,6 +899,7 @@ async function init() {
     populatePlanFromConfig(cfg);
     renderHeader(biometrics);
     renderHero(biometrics);
+    renderGoal(biometrics);
     renderMacros(biometrics);
     renderFlags(biometrics);
     renderCharts(biometrics);
