@@ -552,11 +552,33 @@ function renderCharts(data) {
   new Chart(document.getElementById('chart-composition'), {
     type: 'line',
     data: { labels, datasets: [
-      { label: 'Weight', data: data.map(d => d.body.weight_lbs), ...lineDefaults('#e8ff47', n) },
-      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), ...lineDefaults('#5e9cf5', n) },
-      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n) },
+      { label: 'Weight', data: data.map(d => d.body.weight_lbs), ...lineDefaults('#e8ff47', n), yAxisID: 'yMain' },
+      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), ...lineDefaults('#5e9cf5', n), yAxisID: 'yMain' },
+      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), ...lineDefaults('#ff4757', n), yAxisID: 'yFat' },
     ]},
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' } } } }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults, callbacks: {
+        label: ctx => {
+          const unit = ctx.dataset.yAxisID === 'yFat' ? ' lbs fat' : ' lbs';
+          return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y?.toFixed(1) + unit;
+        }
+      }}},
+      scales: {
+        x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } },
+        yMain: {
+          type: 'linear', position: 'left',
+          grid: { color: '#1a1a1a' },
+          ticks: { callback: v => v + ' lbs', color: '#666' },
+        },
+        yFat: {
+          type: 'linear', position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { callback: v => v + ' lbs', color: '#ff4757' },
+          title: { display: true, text: 'Fat Mass', color: 'rgba(255,71,87,0.5)', font: { size: 10 } },
+        }
+      }
+    }
   });
 
   new Chart(document.getElementById('chart-bf'), {
