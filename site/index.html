@@ -580,7 +580,7 @@ function renderCharts(data) {
       }}},
       scales: {
         x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } },
-        y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } }
+        y: { min: 0, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } }
       }
     }
   });
