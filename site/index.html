@@ -594,13 +594,13 @@ function renderGoal(data) {
     <div class="stat-card">
       <div class="stat-label">Goal Body Fat</div>
       <div class="stat-value">${goalBfPct}<span class="unit"> %</span></div>
-      <div class="stat-delta ${currentBf <= goalBfPct ? 'delta-positive' : 'delta-negative'}">${bfDelta != null ? (bfDelta > 0 ? '+' : '') + bfDelta + '% to go' : '—'}</div>
+      <div class="stat-delta ${currentBf <= goalBfPct ? 'delta-positive' : 'delta-negative'}">${bfDelta != null ? bfDelta + '% to go' : '—'}</div>
       <div class="stat-sub">Based on current lean mass</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Target Weight</div>
       <div class="stat-value">${targetWeight.toFixed(1)}<span class="unit"> lbs</span></div>
-      <div class="stat-delta ${latest.body.weight_lbs <= targetWeight ? 'delta-positive' : 'delta-negative'}">${(latest.body.weight_lbs - targetWeight).toFixed(1) > 0 ? '+' : ''}${(latest.body.weight_lbs - targetWeight).toFixed(1)} lbs to go</div>
+      <div class="stat-delta ${latest.body.weight_lbs <= targetWeight ? 'delta-positive' : 'delta-negative'}">${(latest.body.weight_lbs - targetWeight).toFixed(1)} lbs to go</div>
       <div class="stat-sub">At ${currentLean?.toFixed(1)} lbs lean mass</div>
     </div>
     <div class="stat-card">
