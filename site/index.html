@@ -627,7 +627,7 @@ function renderCharts(data) {
   const n = data.length;
   const goalFrac = ((window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null) / 100;
   const goalLine = props => goalFrac != null
-    ? { label: 'Goal', data: data.map(d => d.body.lean_mass_lbs != null ? d.body.lean_mass_lbs / (1 - goalFrac) * (props.fatOnly ? goalFrac : 1) : null), borderColor: '#e8ff47', backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 4, pointBackgroundColor: '#e8ff47', tension: 0.3, fill: false }
+    ? { label: 'Goal', data: data.map(d => d.body.lean_mass_lbs != null ? d.body.lean_mass_lbs / (1 - goalFrac) * (props.fatOnly ? goalFrac : 1) : null), borderColor: '#e8ff47', backgroundColor: 'rgba(232,255,71,0.07)', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 4, pointBackgroundColor: '#e8ff47', tension: 0.3, fill: 'origin' }
     : null;
 
   const compGoal = goalLine({ fatOnly: false });
