@@ -630,7 +630,7 @@ function renderCharts(data) {
     type: 'line',
     data: { labels, datasets: [
       { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.3)', borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: 'origin' },
-      { label: 'Body Weight', data: data.map(d => d.body.weight_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.3)', borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: '-1' },
+      { label: 'Body Weight', data: data.map(d => d.body.weight_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.3)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: '-1' },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
