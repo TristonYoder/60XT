@@ -193,8 +193,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "12615bf4079f4b3b",
+  "active": "e8c1bd18806252e2",
   "lastOpenFiles": [
+    "HealthAutoExport-2026-03-25-2026-04-16.json",
     "HealthAutoExport-2026-03-22-2026-04-15.json",
     "60XT Plan.md",
     "2026-04-15.md",
@@ -209,7 +210,6 @@
     "scripts",
     "site/index.html",
     "HealthAutoExport-2025-03-31-2026-04-14.json",
-    "site/data/journal.jsonl",
     "Welcome.md"
   ]
 }
