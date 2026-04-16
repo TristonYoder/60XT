@@ -554,8 +554,8 @@ function renderMacros(data) {
     return `<div class="macro-card">
       <div class="macro-label">${labels[key]}<span style="color:var(--text-muted)"> · 7d avg</span></div>
       <div class="macro-current" style="color:${color}">${Math.round(avg)}<span style="font-size:14px;font-weight:500;color:var(--text-muted)"> ${units[key]}</span></div>
-      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:${(pct/1.5*100).toFixed(1)}%;background:${color}"></div></div>
-      <div class="macro-target"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${color};margin-right:5px;vertical-align:middle;opacity:0.7"></span>Target: ${targets[key]} ${units[key]}</div>
+      <div class="macro-bar-bg" style="position:relative"><div class="macro-bar-fill" style="width:${(pct/1.5*100).toFixed(1)}%;background:${color}"></div><div style="position:absolute;top:-2px;bottom:-2px;left:calc(100%/1.5);width:2px;background:var(--text-dim);border-radius:1px"></div></div>
+      <div class="macro-target">Target: ${targets[key]} ${units[key]}</div>
     </div>`;
   }).join('');
 }
