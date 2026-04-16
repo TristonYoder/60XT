@@ -565,8 +565,8 @@ function renderCharts(data) {
   new Chart(document.getElementById('chart-composition'), {
     type: 'line',
     data: { labels, datasets: [
-      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: true },
       { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: true },
+      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: true },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
