@@ -565,15 +565,22 @@ function renderCharts(data) {
   new Chart(document.getElementById('chart-composition'), {
     type: 'line',
     data: { labels, datasets: [
-      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: true },
-      { label: 'Fat Mass', data: data.map(d => d.body.fat_mass_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.35)', borderWidth: 2, pointRadius: n > 30 ? 2 : 3, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: true },
+      { label: 'Lean Mass', data: data.map(d => d.body.lean_mass_lbs), borderColor: '#5e9cf5', backgroundColor: 'rgba(94,156,245,0.3)', borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#5e9cf5', tension: 0.3, fill: 'origin' },
+      { label: 'Body Weight', data: data.map(d => d.body.weight_lbs), borderColor: '#ff4757', backgroundColor: 'rgba(255,71,87,0.3)', borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#ff4757', tension: 0.3, fill: '-1' },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults } },
+      plugins: { legend: { display: false }, tooltip: { ...tooltipDefaults, callbacks: {
+        label: ctx => {
+          if (ctx.datasetIndex === 0) return ' Lean Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs';
+          const lean = ctx.chart.data.datasets[0].data[ctx.dataIndex] ?? 0;
+          const fat = (ctx.parsed.y - lean).toFixed(1);
+          return [' Body Weight: ' + ctx.parsed.y?.toFixed(1) + ' lbs', ' Fat Mass: ' + fat + ' lbs'];
+        }
+      }}},
       scales: {
         x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } },
-        y: { stacked: true, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } }
+        y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } }
       }
     }
   });
