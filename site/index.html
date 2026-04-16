@@ -627,7 +627,7 @@ function renderCharts(data) {
   const n = data.length;
   const goalFrac = ((window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null) / 100;
   const goalLine = props => goalFrac != null
-    ? { label: 'Goal', data: data.map(d => d.body.lean_mass_lbs != null ? d.body.lean_mass_lbs / (1 - goalFrac) * (props.fatOnly ? goalFrac : 1) : null), borderColor: '#e8ff47', backgroundColor: 'rgba(232,255,71,0.07)', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 4, pointBackgroundColor: '#e8ff47', tension: 0.3, fill: 'origin' }
+    ? { label: 'Goal', data: data.map(d => d.body.lean_mass_lbs != null ? d.body.lean_mass_lbs / (1 - goalFrac) * (props.fatOnly ? goalFrac : 1) : null), borderColor: '#e8ff47', backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 4, pointBackgroundColor: '#e8ff47', tension: 0.3, fill: false }
     : null;
 
   const compGoal = goalLine({ fatOnly: false });
@@ -673,7 +673,7 @@ function renderCharts(data) {
       label: ctx => ctx.dataset.label === 'Goal'
         ? ' Goal Fat: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
         : ' Fat Mass: ' + ctx.parsed.y?.toFixed(1) + ' lbs'
-    }}}, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
+    }}}, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 10 } }, y: { min: fatGoal ? Math.min(...fatGoal.data.filter(v => v != null)) - 3 : undefined, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + ' lbs' } } } }
   });
 
   const goalBfPct = (window.CFG && window.CFG.goal && window.CFG.goal.body_fat_pct) ?? null;
@@ -684,7 +684,7 @@ function renderCharts(data) {
       annotation: goalBfPct != null ? { annotations: {
         goal: { type: 'line', yMin: goalBfPct, yMax: goalBfPct, borderColor: 'rgba(232,255,71,0.5)', borderWidth: 1, borderDash: [4, 4], label: { content: goalBfPct + '% goal', display: true, position: 'end', color: '#e8ff47', font: { size: 10 }, backgroundColor: 'transparent' } }
       }} : {}
-    }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 8 } }, y: { grid: { color: '#1a1a1a' }, ticks: { callback: v => v + '%' } } } }
+    }, scales: { x: { grid: { color: '#1a1a1a' }, ticks: { maxTicksLimit: 8 } }, y: { min: goalBfPct != null ? goalBfPct - 2 : undefined, grid: { color: '#1a1a1a' }, ticks: { callback: v => v + '%' } } } }
   });
 
   const latest = data[data.length - 1];
