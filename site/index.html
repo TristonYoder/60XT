@@ -814,7 +814,7 @@ function renderJournal(data, entries) {
     ].join('');
 
     return `
-    <div class="journal-card" ${entry ? 'style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-mid)"' : ''}>
+    <div class="journal-card">
       <div class="journal-card-header">
         <div>
           <div class="journal-date">${formatDate(d.date)}</div>
@@ -826,7 +826,7 @@ function renderJournal(data, entries) {
         </div>
       </div>
       <div class="journal-summary">${summary}</div>
-      ${entry ? `<div class="journal-subcard"><div class="journal-title">${entry.title || 'Journal Entry'}</div><div class="journal-body">${entry.body || ''}</div></div>` : ''}
+      ${entry ? `<div class="journal-subcard" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-mid)"><div class="journal-title">${entry.title || 'Journal Entry'}</div><div class="journal-body">${entry.body || ''}</div></div>` : ''}
     </div>
   `;}).join('');
 }
