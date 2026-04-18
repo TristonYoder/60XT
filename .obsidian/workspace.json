@@ -18,8 +18,23 @@
               "icon": "lucide-file",
               "title": "HealthAutoExport-2026-03-30-2026-04-18 2"
             }
+          },
+          {
+            "id": "33b2a50c2d919368",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "journal/2026.04.10.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026.04.10"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -92,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
+                "file": "journal/2026.04.10.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +117,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for HealthAutoExport-2026-03-30-2026-04-18 2"
+              "title": "Backlinks for 2026.04.10"
             }
           },
           {
@@ -111,12 +126,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
+                "file": "journal/2026.04.10.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from HealthAutoExport-2026-03-30-2026-04-18 2"
+              "title": "Outgoing links from 2026.04.10"
             }
           },
           {
@@ -154,13 +169,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
+                "file": "journal/2026.04.10.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of HealthAutoExport-2026-03-30-2026-04-18 2"
+              "title": "Outline of 2026.04.10"
             }
           },
           {
@@ -193,23 +208,24 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "12615bf4079f4b3b",
+  "active": "33b2a50c2d919368",
   "lastOpenFiles": [
-    "HealthAutoExport-2026-03-30-2026-04-18.json",
+    "journal/2026.04.14.md",
+    "journal/2026.04.10.md",
+    "journal/template.md",
     "HealthAutoExport-2026-03-30-2026-04-18 2.json",
+    "HealthAutoExport-2026-03-30-2026-04-18.json",
     "site/data/config.json",
     "HealthAutoExport-2026-03-25-2026-04-16.json",
     "HealthAutoExport-2026-03-25-2026-04-17.json",
     "HealthAutoExport-2026-03-22-2026-04-15.json",
     "60XT Plan.md",
     "2026-04-15.md",
-    "journal/2026.04.14.md",
     "HealthAutoExport-2026-03-30-2026-04-15.json",
     "journal",
     "CLAUDE.md",
     "site/data/biometrics.jsonl",
     "HealthAutoExport-2026-03-31-2026-04-14.json",
-    "scripts/convert_health_export.py",
     "Welcome.md"
   ]
 }
