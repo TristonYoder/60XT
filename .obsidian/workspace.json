@@ -13,10 +13,10 @@
             "state": {
               "type": "json",
               "state": {
-                "file": "site/data/config.json"
+                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json"
               },
               "icon": "lucide-file",
-              "title": "config"
+              "title": "HealthAutoExport-2026-03-30-2026-04-18 2"
             }
           }
         ]
@@ -92,7 +92,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "site/data/config.json",
+                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for config"
+              "title": "Backlinks for HealthAutoExport-2026-03-30-2026-04-18 2"
             }
           },
           {
@@ -111,12 +111,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "site/data/config.json",
+                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from config"
+              "title": "Outgoing links from HealthAutoExport-2026-03-30-2026-04-18 2"
             }
           },
           {
@@ -154,13 +154,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "site/data/config.json",
+                "file": "HealthAutoExport-2026-03-30-2026-04-18 2.json",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of config"
+              "title": "Outline of HealthAutoExport-2026-03-30-2026-04-18 2"
             }
           },
           {
@@ -193,9 +193,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "e8c1bd18806252e2",
+  "active": "12615bf4079f4b3b",
   "lastOpenFiles": [
+    "HealthAutoExport-2026-03-30-2026-04-18.json",
+    "HealthAutoExport-2026-03-30-2026-04-18 2.json",
+    "site/data/config.json",
     "HealthAutoExport-2026-03-25-2026-04-16.json",
+    "HealthAutoExport-2026-03-25-2026-04-17.json",
     "HealthAutoExport-2026-03-22-2026-04-15.json",
     "60XT Plan.md",
     "2026-04-15.md",
@@ -204,12 +208,8 @@
     "journal",
     "CLAUDE.md",
     "site/data/biometrics.jsonl",
-    "site/data/config.json",
     "HealthAutoExport-2026-03-31-2026-04-14.json",
     "scripts/convert_health_export.py",
-    "scripts",
-    "site/index.html",
-    "HealthAutoExport-2025-03-31-2026-04-14.json",
     "Welcome.md"
   ]
 }
