@@ -47,20 +47,20 @@
     "training_days": {
       "calories_kcal": 1800,
       "protein_g": 200,
-      "fat_g": 55,
-      "carbs_g": 75
+      "fat_g": 60,
+      "carbs_g": 114
     },
     "rest_day": {
-      "calories_kcal": 1600,
+      "calories_kcal": 1750,
       "protein_g": 200,
-      "fat_g": 65,
-      "carbs_g": 35
+      "fat_g": 45,
+      "carbs_g": 135
     },
     "fri_sat": {
       "calories_kcal": 1800,
       "protein_g": 200,
-      "fat_g": 55,
-      "carbs_g": 100
+      "fat_g": 60,
+      "carbs_g": 114
     }
   },
   "goal": {
