@@ -25,12 +25,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "journal/2026.04.03.md",
+                "file": "journal/2026.04.20.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026.04.03"
+              "title": "2026.04.20"
             }
           }
         ],
@@ -204,14 +204,17 @@
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "publish:Publish changes...": false,
       "obsidian-git:Open Git source control": false
     }
   },
   "active": "33b2a50c2d919368",
   "lastOpenFiles": [
-    "journal/template.md",
+    "HealthAutoExport-2026-03-29-2026-04-21.json",
+    "journal/2026.04.20.md",
+    "journal/2026.04.16.md",
+    "Untitled.md",
     "journal/2026.04.03.md",
+    "journal/template.md",
     "journal/2026.04.10.md",
     "journal/2026.04.14.md",
     "HealthAutoExport-2026-03-30-2026-04-18 2.json",
@@ -226,7 +229,6 @@
     "journal",
     "CLAUDE.md",
     "site/data/biometrics.jsonl",
-    "HealthAutoExport-2026-03-31-2026-04-14.json",
     "Welcome.md"
   ]
 }
