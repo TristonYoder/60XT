@@ -47,16 +47,12 @@ Managed externally via Alpha class at Lifetime Fitness — 6 days/week. Each ses
 
 ### Energy Budget
 
-| | Training Days | Rest (Sunday) |
-|---|---|---|
-| Calories | 1,800 | 1,600 |
-| Protein | 200g | 200g |
-| Fat | 55g | 65g |
-| Carbs | 70–80g | 30–40g |
-| Est. Deficit | ~1,300 kcal | ~400 kcal |
-
-Friday and Saturday have later classes — apply 100g carb target on those days to fuel a proper pre-training meal.
-
+|          | Training Days | Rest (Sunday) |
+| -------- | ------------- | ------------- |
+| Calories | 1,800         | 1,600         |
+| Protein  | 200g          | 200g          |
+| Fat      | 60g           | 65g           |
+| Carbs    | 114g          | 30–40g        |
 ### Carb Philosophy
 
 Carbs earn their place by fueling training. They are front-loaded on training days — not distributed evenly. Dinner carbs on 6am training days are low-leverage and add unnecessary complexity. The structure is:
@@ -64,25 +60,6 @@ Carbs earn their place by fueling training. They are front-loaded on training da
 1. **Pre-workout** — highest priority
 2. **Post-workout / breakfast** — replenish glycogen
 3. **Rest of day** — incidental only (fruit, trace carbs from food)
-
-### Daily Eating Structure
-
-**6am class days (Mon–Thu):**
-- ~5:30am — Fruit in the car (~25g carbs).
-- Breakfast — Egg Meal Prep
-- Lunch — Chicken breast + apple or dehydrated apple
-- Dinner — Chicken breast
-
-**Friday (9:30am class):**
-- Full meal at 7:30–8am — chicken breast + eggs + fruit
-- Apply 100g carb target for the day
-
-**Saturday (10:00am class):**
-- Same as Friday
-
-**Sunday (rest):**
-- 30–40g carbs, 65g fat, 200g protein, 1,600 kcal
-
 ### Supplementation
 
 | Supplement           | Dose               | Purpose                                                            |
@@ -95,9 +72,7 @@ Carbs earn their place by fueling training. They are front-loaded on training da
 ## Recovery
 
 ### Contrast Therapy (Mon/Thu/Fri/Sat)
-
 Post-training — 3–4 rounds per session.
-
 - Heat first, cold last — always end cold to drive parasympathetic activation
 - Minimum 10 min sauna / 4-5 min cold per round
 - Treated it as part of the training session, not optional
@@ -114,7 +89,6 @@ Post-training — 3–4 rounds per session.
 38ms is the observed floor from peak paternity stress (Mar 15–17).
 
 ---
-
 ## Progress Tracking
 
 ### Daily Log
@@ -134,22 +108,18 @@ Post-training — 3–4 rounds per session.
 
 ## Baseline Biometrics
 
-| Date   | Weight    | Body Fat % | Fat Mass | Lean Mass | HRV Avg |
-| ------ | --------- | ---------- | -------- | --------- | ------- |
-| Mar 30 | 198.4     | 16.9%      | 33.9 lbs | 167.2 lbs | 63.0 ms |
-| Apr 14 | 199.4 lbs | 16.9%      | 33.7 lbs | 165.7 lbs | 55.3 ms |
+| Date   | Weight | Body Fat % | Fat Mass | Lean Mass |
+| ------ | ------ | ---------- | -------- | --------- |
+| Mar 31 | 205.6  | 18.2       | 37.4 lbs | 168.4 lbs |
 
-BIA scan (Apr 14): Body Score 85/100, Body Age 27, Visceral Fat Level 5 (low), Skeletal Muscle 95.5 lbs, SMI 9.5 kg/m².
 
-Segmental fat: trunk at 17.6 lbs / 159.6% — within standard range but high end. Primary reduction target.
-Muscle balance: legs above average (117–118%), upper limbs standard (112–114%). Upper body is the long-term development opportunity.
 
 ---
 
 ## Version History
 
-| Version | Date | Changes |
-|---|---|---|
-| v1.0 | Apr 10, 2026 | Initial plan. Baseline biometrics. Carb timing protocol introduced. Fat source adjustments. |
-| v1.1 | Apr 14, 2026 | Reduced carb targets (130g → 70–80g training days). Simplified pre-workout to banana. Removed dinner carb target on 6am days. Protein adjusted to 200g. Calories to 1,800 on training days. Sleep context corrected. |
-| v1.2 | Apr 14, 2026 | Challenge start date corrected to March 31, 2026. |
+| Version | Date         | Changes                                                                                     |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| v1.0    | Mar 31, 2026 | Initial plan. Baseline biometrics. Carb timing protocol introduced. Fat source adjustments. |
+
+
