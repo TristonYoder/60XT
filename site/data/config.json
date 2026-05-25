@@ -64,7 +64,7 @@
     }
   },
   "goal": {
-    "body_fat_pct": 12
+    "body_fat_pct": 13
   },
   "hrv_thresholds": {
     "well_recovered": 55,
