@@ -1,0 +1,215 @@
+{
+  "main": {
+    "id": "d0b399a87a51f2b8",
+    "type": "split",
+    "children": [
+      {
+        "id": "b912f5e2edc46adc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "61d48a4a737d1936",
+            "type": "leaf",
+            "state": {
+              "type": "diff-view",
+              "state": {
+                "aFile": "journal/2026.04.16.md",
+                "bFile": "journal/2026.04.16.md",
+                "aRef": ""
+              },
+              "icon": "git-pull-request",
+              "title": "Diff: 2026.04.16"
+            }
+          },
+          {
+            "id": "50fdc33b028b1110",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2026.05.31.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026.05.31"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9836e7871edb14b8",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "266a7e9fb952fae9",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false
+          },
+          "icon": "lucide-folder-closed",
+          "title": "Files"
+        }
+      },
+      {
+        "id": "96a524911ab9061c",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "Search"
+        }
+      },
+      {
+        "id": "3ffdcae8136b44a2",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "Tags"
+        }
+      },
+      {
+        "id": "2b903dbbe4a43474",
+        "type": "leaf",
+        "state": {
+          "type": "all-properties",
+          "state": {
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-archive",
+          "title": "All properties"
+        }
+      },
+      {
+        "id": "1154ebaa3e04a30a",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "Bookmarks"
+        }
+      }
+    ],
+    "currentTab": 0,
+    "pinned": true
+  },
+  "right": {
+    "id": "b6542bc2d63edd1d",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "3f7b08dab9f6fff6",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "journal/2026.05.30.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "Backlinks"
+        }
+      },
+      {
+        "id": "6846d431658942a5",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "journal/2026.05.30.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "Outgoing links"
+        }
+      },
+      {
+        "id": "55a86b9a8b054137",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "journal/2026.05.30.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "Outline"
+        }
+      },
+      {
+        "id": "51a9646ed2c128a2",
+        "type": "leaf",
+        "state": {
+          "type": "git-view",
+          "state": {},
+          "icon": "git-pull-request",
+          "title": "Source Control"
+        }
+      }
+    ],
+    "currentTab": 3,
+    "pinned": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "61d48a4a737d1936",
+  "lastOpenFiles": [
+    "journal/2026.05.30.md",
+    "2026.05.31.md",
+    "60XT Plan.md",
+    "site/data/config.json",
+    "HealthAutoExport-2026-03-31-2026-05-30_20260531_220344.json",
+    "HealthAutoExport-2026-03-31-2026-05-30.json",
+    "journal/2026.04.03.md",
+    "journal/2026.04.10.md",
+    "journal/2026.04.16.md",
+    "journal/2026.04.20.md",
+    "CLAUDE.md",
+    "HealthAutoExport-2026-03-30-2026-04-19.json",
+    "60XT Plan.sync-conflict-20260520-201455-CGTCWF7.md",
+    "60XT Plan.sync-conflict-20260520-201946-CGTCWF7.md"
+  ]
+}

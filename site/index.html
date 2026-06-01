@@ -6,6 +6,7 @@
 <title>60XT — Triston's Transformation</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <style>
   :root {
     --bg: #0a0a0a;
@@ -213,7 +214,25 @@
   .journal-gauge-copy .journal-metric-value { font-size: 16px; }
   .journal-gauge-copy .journal-metric-sub { margin-top: 4px; }
   .journal-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-  .journal-body { font-size: 14px; color: var(--text-dim); line-height: 1.75; white-space: pre-wrap; }
+  .journal-body { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+  .journal-body p { margin: 0 0 10px; }
+  .journal-body p:last-child { margin-bottom: 0; }
+  .journal-body h1, .journal-body h2, .journal-body h3 { color: var(--text); font-weight: 700; margin: 14px 0 6px; }
+  .journal-body h1 { font-size: 15px; }
+  .journal-body h2 { font-size: 14px; }
+  .journal-body h3 { font-size: 13px; }
+  .journal-body ul, .journal-body ol { padding-left: 20px; margin: 0 0 10px; }
+  .journal-body li { margin-bottom: 4px; }
+  .journal-body strong { color: var(--text); font-weight: 600; }
+  .journal-body em { font-style: italic; }
+  .journal-body code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 1px 5px; border-radius: 3px; }
+  .journal-body pre { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; overflow-x: auto; margin: 0 0 10px; }
+  .journal-body pre code { background: none; padding: 0; }
+  .journal-body table { border-collapse: collapse; width: 100%; margin: 0 0 10px; font-size: 13px; }
+  .journal-body th, .journal-body td { border: 1px solid var(--border); padding: 5px 10px; text-align: left; }
+  .journal-body th { background: var(--surface2); color: var(--text); font-weight: 600; }
+  .journal-body hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+  .journal-body blockquote { border-left: 3px solid var(--accent); padding-left: 12px; margin: 0 0 10px; color: var(--text-muted); }
   .journal-subcard { margin-top: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 18px; }
 
   .tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: var(--radius-sm); padding: 3px; width: fit-content; }
@@ -826,7 +845,7 @@ function renderJournal(data, entries) {
         </div>
       </div>
       <div class="journal-summary">${summary}</div>
-      ${entry ? `<div class="journal-subcard" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-mid)"><div class="journal-title">${entry.title || 'Journal Entry'}</div><div class="journal-body">${entry.body || ''}</div></div>` : ''}
+      ${entry ? `<div class="journal-subcard" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-mid)"><div class="journal-title">${entry.title || 'Journal Entry'}</div><div class="journal-body">${marked.parse(entry.body || '')}</div></div>` : ''}
     </div>
   `;}).join('');
 }
